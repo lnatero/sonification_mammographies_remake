@@ -1,5 +1,13 @@
 const brushColor = 'lime';
 const brushSize = 100;
+var zoom = 0.1;
+
+function myFunction(e) {
+    let x = e.clientX;
+    let y = e.clientY;
+    let coor = "Coordinates: (" + x + "," + y + ")";
+    console.log(coor);
+};
 
 const getDrawCursor = () => {
 	const circle = `
@@ -14,7 +22,7 @@ const getDrawCursor = () => {
 			<circle
 				cx="50%"
 				cy="50%"
-				r="${ brushSize }" 
+				r="${ brushSize*zoom }" 
 			/>
 		</svg>
 	`;
@@ -32,34 +40,36 @@ const canvas = new fabric.Canvas("rasterCanvas", {
     freeDrawingCursor: `url(${ getDrawCursor() }) ${ brushSize / 2 } ${ brushSize / 2 }, crosshair`,
 });
 
-canvas.requestRenderAll();
 
-fabric.Image.fromURL("./assets/export--69797765.jpg", function(oImg) {
+
+const img = fabric.Image.fromURL("./assets/export--69797765.jpg", function(oImg) {
     // oImg.set("lockMovementX", true);
     // oImg.set("lockMovementY", true);
     oImg.set("selectable", false);
     oImg.set("hasControls", false);
     oImg.set("hoverCursor", "default");
     canvas.add(oImg);
-  });
-
-
-
-
+    canvas.zoomToPoint(new fabric.Point(oImg.width/1000, oImg.height/1000), 0.1);
+});
+  
 canvas.on('mouse:wheel', function(opt) {
     var delta = opt.e.deltaY;
-    var zoom = canvas.getZoom();
+    zoom = canvas.getZoom();
+    console.log("Zoom:", zoom);
     zoom *= 0.999 ** delta;
     if (zoom > 20) zoom = 20;
     if (zoom < 0.01) zoom = 0.01;
     canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
     opt.e.preventDefault();
     opt.e.stopPropagation();
-  });
+    canvas.freeDrawingCursor = `url(${ getDrawCursor() }) ${ brushSize / 2 } ${ brushSize / 2 }, crosshair`;
+    this.requestRenderAll();
+});
 
 canvas.on('mouse:down', function(opt) {
     var evt = opt.e;
-    if (evt.altKey === true) {
+    console.log(opt.e.buttons);
+    if (evt.buttons === 4) {
         this.isDragging = true;
         canvas.isDrawingMode = false;
         this.selection = false;
@@ -67,12 +77,52 @@ canvas.on('mouse:down', function(opt) {
         this.lastPosY = evt.clientY;
     } else {
         brush = canvas.freeDrawingBrush;
+        canvas.freeDrawingCursor = `url(${ getDrawCursor() }) ${ brushSize / 2 } ${ brushSize / 2 }, crosshair`;
         brush.color = brushColor;
         brush.opacity = 0.5;
         brush.width = brushSize;
         brush.drawDot = true;
     }
 });
+addEventListener("keydown", async evt => {
+    // var evt = opt.e;
+    console.log(evt.key);
+    // canvas.freeDrawingCursor = 'move';
+    if (evt.key == " ") {
+        console.log(document.querySelector(".canvas-container"));
+        canvas.on('mouse:move', function(opt) {
+            // document.querySelector(".upper-canvas").style.cursor = 'move';
+            canvas.setCursor('move');
+            var evt = opt.e;
+            // console.log(opt.e.buttons);
+            this.isDragging = true;
+            canvas.isDrawingMode = false;
+            this.selection = false;
+            this.lastPosX = evt.clientX;
+            this.lastPosY = evt.clientY;
+        });
+    }
+});
+addEventListener("keyup", async evt => {
+    // var evt = opt.e;
+    // console.log(evt.key);
+    if (evt.key == " ") {
+        // document.documentElement.style.cursor = 'default';
+        canvas.on('mouse:move', function(opt) {
+            var evt = opt.e;
+            canvas.setCursor(`url(${ getDrawCursor() }) ${ brushSize / 2 } ${ brushSize / 2 }, crosshair`);
+            // document.getElementsByClassName("upper-canvas")[0].style.removeProperty("cursor");
+            // console.log(opt.e.buttons);
+            this.isDragging = false;
+            canvas.isDrawingMode = true;
+            this.selection = true;
+            this.lastPosX = evt.clientX;
+            this.lastPosY = evt.clientY;
+            canvas.freeDrawingCursor = `url(${ getDrawCursor() }) ${ brushSize / 2 } ${ brushSize / 2 }, crosshair`;
+        });
+    }
+});
+
 canvas.on('mouse:move', function(opt) {
     if (this.isDragging) {
         canvas.isDrawingMode = false;
@@ -83,6 +133,10 @@ canvas.on('mouse:move', function(opt) {
         this.requestRenderAll();
         this.lastPosX = e.clientX;
         this.lastPosY = e.clientY;
+    } else {
+        // console.log(opt);
+        // console.log(opt.target);
+        // console.log(opt.e.clientX, opt.e.clientY);
     }
 });
 canvas.on('mouse:up', function(opt) {
@@ -94,6 +148,24 @@ canvas.on('mouse:up', function(opt) {
     this.selection = true;
   });
 
+
+  
+  canvas.on('mouse:move', function(event) {
+      // Get the mouse pointer coordinates relative to the canvas
+      // Get an array of all objects on the canvas
+      var objects = canvas.getObjects();
+      
+      console.log();
+      var pointer = canvas.getPointer(event.e);
+      
+      // Get the mouse pointer coordinates relative to the image
+      var imagePointer = objects[0].toLocalPoint(new fabric.Point(pointer.x, pointer.y), 'top', 'left');
+      
+      // Log the coordinates to the console
+      console.log('Mouse coordinates relative to the image:', imagePointer.x, imagePointer.y);
+});
+
+canvas.requestRenderAll();
 // rect = new fabric.Rect({
 //     left: 10,
 //     top: 200,
