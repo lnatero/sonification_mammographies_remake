@@ -154,7 +154,7 @@ canvas.on('mouse:move', function(event) {
     // Get the mouse pointer coordinates relative to the canvas
     // Get an array of all objects on the canvas
 
-    /////////// La DATA pareciera estar desfasada hacia abajo y la derecha ///////////
+    ///////// La DATA pareciera estar desfasada hacia abajo y la derecha ///////////
     // var ctx = canvas.getContext('2d');
     // // console.log(ctx.getImageData(event.e.clientX, event.e.clientY, 6, 6).data);
     // var data = ctx.getImageData(event.e.clientX, event.e.clientY, 6, 6).data;
@@ -164,14 +164,16 @@ canvas.on('mouse:move', function(event) {
 	// }
     // console.log(data);
 
-    /////////// sacando las coordenadas de los pixeles de la imagen ///////////
+    ///////// sacando las coordenadas de los pixeles de la imagen ///////////
     var objects = canvas.getObjects();
     
     console.log();
     var pointer = canvas.getPointer(event.e);
     
+    mammography = objects[0]
     // Get the mouse pointer coordinates relative to the image
-    var imagePointer = objects[0].toLocalPoint(new fabric.Point(pointer.x, pointer.y), 'top', 'left');
+    var imagePointer = mammography.toLocalPoint(new fabric.Point(pointer.x, pointer.y), 'top', 'left');
+    // console.log(mammography.imageData);  
     
     // Log the coordinates to the console
     console.log('Mouse coordinates relative to the image:', imagePointer.x, imagePointer.y);
