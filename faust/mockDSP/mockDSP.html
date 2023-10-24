@@ -1,17 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sonification Mammographies</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="./lib/fabric.js"></script>
-    <script src="faust/mockDSP/mockDSP.js"></script>
-    <!-- <script src="https://unpkg.com/fabric@5.3.0/dist/fabric.min.js"></script> -->
+<H1> Faust generated WebAudio node </H1>
 </head>
 <body>
+<P> Mute:
+    <input type="range" onchange="toggleMute(event) "min="0" max="1" value="0" step="1"> 
+<P> Volume:
+    <input type="range" oninput="changeMean(event) "min="0" max="1" value="0" step="0.01"/>
+<P> Noise:
+    <input type="range" oninput="changeStdDev(event) "min="0" max="1" value="0.5" step="0.01"/>        
+<P> Frequency:
+    <input type="range" oninput="changeSkewness(event) "min="0" max="1" value="0.5" step="0.01"/>        
+<P> Tempo:
+    <input type="range" oninput="changeKurtosis(event) "min="0" max="1" value="0.5" step="0.01"/>        
 
-    <script>
+<!-- Load 'faust2wasm' script generated .js file -->
+<script src="mockDSP.js"></script>
+
+<script>
+    
 if (typeof (WebAssembly) === "undefined") {
     alert("WebAssembly is not supported in this browser, the page will not work !")
 }
@@ -105,12 +112,7 @@ window.addEventListener("mousedown", () => {
     audio_context.resume().then(() => console.log("Audio resumed"))
 });  
 
-    </script>
+</script>
 
-
-    <canvas id="rasterCanvas"></canvas>
-
-    <script src="canvas.js"></script>
-    <script src="sonification.js"></script>
 </body>
 </html>

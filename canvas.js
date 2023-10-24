@@ -1,5 +1,5 @@
-const brushColor = 'lime';
-const brushSize = 100;
+const brushColor = '#0FFFFF90';
+const brushSize = 6;
 var zoom = 0.1;
 
 function myFunction(e) {
@@ -39,7 +39,6 @@ const canvas = new fabric.Canvas("rasterCanvas", {
     fireMiddleClick: true,
     freeDrawingCursor: `url(${ getDrawCursor() }) ${ brushSize / 2 } ${ brushSize / 2 }, crosshair`,
 });
-
 
 
 const img = fabric.Image.fromURL("./assets/export--69797765.jpg", function(oImg) {
@@ -149,36 +148,7 @@ canvas.on('mouse:up', function(opt) {
   });
 
 
-  
-canvas.on('mouse:move', function(event) {
-    // Get the mouse pointer coordinates relative to the canvas
-    // Get an array of all objects on the canvas
 
-    ///////// La DATA pareciera estar desfasada hacia abajo y la derecha ///////////
-    // var ctx = canvas.getContext('2d');
-    // // console.log(ctx.getImageData(event.e.clientX, event.e.clientY, 6, 6).data);
-    // var data = ctx.getImageData(event.e.clientX, event.e.clientY, 6, 6).data;
-    // var array = [];
-	// for(var i = 0; i<36; i++){
-	// 	array[i] = data[4*i]
-	// }
-    // console.log(data);
-
-    ///////// sacando las coordenadas de los pixeles de la imagen ///////////
-    var objects = canvas.getObjects();
-    
-    console.log();
-    var pointer = canvas.getPointer(event.e);
-    
-    mammography = objects[0]
-    // Get the mouse pointer coordinates relative to the image
-    var imagePointer = mammography.toLocalPoint(new fabric.Point(pointer.x, pointer.y), 'top', 'left');
-    // console.log(mammography.imageData);  
-    
-    // Log the coordinates to the console
-    console.log('Mouse coordinates relative to the image:', imagePointer.x, imagePointer.y);
-    console.log('Mouse coordinates relative to the canvas:', pointer.x, pointer.y);
-});
 
 canvas.requestRenderAll();
 // rect = new fabric.Rect({
