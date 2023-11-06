@@ -1,5 +1,5 @@
-const brushColor = '#0FFFFF90';
-const brushSize = 6;
+const brushColor = '#FF0F0F90';
+const brushSize = 100;
 var zoom = 0.1;
 
 function myFunction(e) {
@@ -10,34 +10,32 @@ function myFunction(e) {
 };
 
 const getDrawCursor = () => {
-	const circle = `
-		<svg
-			height="${ brushSize }"
-			fill="${ brushColor }"
-            fill-opacity="0.5"
-			viewBox="0 0 ${ brushSize * 2 } ${ brushSize * 2 }"
-			width="${ brushSize }"
-			xmlns="http://www.w3.org/2000/svg"
-		>
-			<circle
-				cx="50%"
-				cy="50%"
-				r="${ brushSize*zoom }" 
-			/>
-		</svg>
-	`;
-	
-	return `data:image/svg+xml;base64,${ window.btoa(circle) }`;
+    const square = `
+        <svg
+            height="${ brushSize*zoom }"
+            width="${ brushSize*zoom }"
+            fill="${ brushColor }"
+            fill-opacity="0.9"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <rect
+                width="${ brushSize*zoom }"
+                height="${ brushSize*zoom }"
+            />
+        </svg>
+    `;
+    
+    return `data:image/svg+xml;base64,${ window.btoa(square) }`;
 };
 
 const canvas = new fabric.Canvas("rasterCanvas", {
     width : 2*window.innerWidth/3,
     height : 4*window.innerHeight/5,
     backgroundColor : "#333",
-    isDrawingMode: true,
+    isDrawingMode: false,
     enableRetinaScaling: true,
     fireMiddleClick: true,
-    freeDrawingCursor: `url(${ getDrawCursor() }) ${ brushSize / 2 } ${ brushSize / 2 }, crosshair`,
+    freeDrawingCursor: `url(${ getDrawCursor() }) ${ brushSize } ${ brushSize }, crosshair`,
 });
 
 
@@ -61,7 +59,7 @@ canvas.on('mouse:wheel', function(opt) {
     canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
     opt.e.preventDefault();
     opt.e.stopPropagation();
-    canvas.freeDrawingCursor = `url(${ getDrawCursor() }) ${ brushSize / 2 } ${ brushSize / 2 }, crosshair`;
+    canvas.freeDrawingCursor = `url(${ getDrawCursor() }) 0 0, crosshair`;
     this.requestRenderAll();
 });
 
@@ -75,12 +73,23 @@ canvas.on('mouse:down', function(opt) {
         this.lastPosX = evt.clientX;
         this.lastPosY = evt.clientY;
     } else {
-        brush = canvas.freeDrawingBrush;
-        canvas.freeDrawingCursor = `url(${ getDrawCursor() }) ${ brushSize / 2 } ${ brushSize / 2 }, crosshair`;
-        brush.color = brushColor;
-        brush.opacity = 0.5;
-        brush.width = brushSize;
-        brush.drawDot = true;
+        // brush = canvas.freeDrawingBrush;
+        // canvas.freeDrawingCursor = `url(${ getDrawCursor() }) ${ brushSize / 2 } ${ brushSize / 2 }, crosshair`;
+        // brush.color = brushColor;
+        // brush.opacity = 0.5;
+        // brush.width = brushSize;
+        // brush.drawDot = true;
+
+        var pointer = canvas.getPointer(opt.e);
+        var rect = new fabric.Rect({
+            left: pointer.x,
+            top: pointer.y,
+            fill: 'rgba(255,0,0,0.5)',
+            width: brushSize,
+            height: brushSize,
+            selectable: false
+        });
+        canvas.add(rect);
     }
 });
 addEventListener("keydown", async evt => {
@@ -91,7 +100,7 @@ addEventListener("keydown", async evt => {
         console.log(document.querySelector(".canvas-container"));
         canvas.on('mouse:move', function(opt) {
             // document.querySelector(".upper-canvas").style.cursor = 'move';
-            canvas.setCursor('move');
+            canvas.setCursor('grab');
             var evt = opt.e;
             // console.log(opt.e.buttons);
             this.isDragging = true;
@@ -113,7 +122,7 @@ addEventListener("keyup", async evt => {
             // document.getElementsByClassName("upper-canvas")[0].style.removeProperty("cursor");
             // console.log(opt.e.buttons);
             this.isDragging = false;
-            canvas.isDrawingMode = true;
+            // canvas.isDrawingMode = true;
             this.selection = true;
             this.lastPosX = evt.clientX;
             this.lastPosY = evt.clientY;
@@ -141,7 +150,7 @@ canvas.on('mouse:move', function(opt) {
 canvas.on('mouse:up', function(opt) {
     // on mouse up we want to recalculate new interaction
     // for all objects, so we call setViewportTransform
-    canvas.isDrawingMode = true;
+    // canvas.isDrawingMode = true;
     this.setViewportTransform(this.viewportTransform);
     this.isDragging = false;
     this.selection = true;
