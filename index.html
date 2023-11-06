@@ -107,12 +107,19 @@ window.addEventListener("mousedown", () => {
 
     </script>
 
+<b>Controles</b>
+<ul>
+    <li>Puedes hacer zoom con la rueda del mouse.</li>
+    <li>Puedes moverle en la imagen manteniendo presionada la rueda del mouse.</li>
+    <li>Alternativamente puedes moverte manteniendo presionada la barra espaciadora y moviendo el mouse.</li>
+    <li>Puedes cambiar el tamaño del selector usando el <i>slider</i> de abajo.</li>
+</ul>
 
     <canvas id="rasterCanvas"></canvas>
 
     <script src="canvas.js"></script>
     <!-- <script src="sonification.js"></script> -->
-    <div style="padding-top: 50px;">
+    <div style="padding-top: 25px;">
         <input type="range" id="mySlider" min="0" max="200" value="100" oninput="updateSliderValue(this.value)">
         <span id="sliderValue">100</span>
     </div>
