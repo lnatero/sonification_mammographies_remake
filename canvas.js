@@ -39,6 +39,7 @@ const canvas = new fabric.Canvas("rasterCanvas", {
 });
 
 
+
 const img = fabric.Image.fromURL("./assets/export--69797765.jpg", function(oImg) {
     // oImg.set("lockMovementX", true);
     // oImg.set("lockMovementY", true);
@@ -59,8 +60,10 @@ canvas.on('mouse:wheel', function(opt) {
     canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
     opt.e.preventDefault();
     opt.e.stopPropagation();
+    
     canvas.freeDrawingCursor = `url(${ getDrawCursor() }) 0 0, crosshair`;
-    this.requestRenderAll();
+    canvas.setCursor(`url(${ getDrawCursor() }) 0 0, crosshair`);
+    canvas.requestRenderAll();
 });
 
 canvas.on('mouse:down', function(opt) {
@@ -79,7 +82,8 @@ canvas.on('mouse:down', function(opt) {
         // brush.opacity = 0.5;
         // brush.width = brushSize;
         // brush.drawDot = true;
-
+        
+        canvas.freeDrawingCursor = `url(${ getDrawCursor() }) 0 0, crosshair`;
         var pointer = canvas.getPointer(opt.e);
         var rect = new fabric.Rect({
             left: pointer.x,
@@ -100,7 +104,7 @@ addEventListener("keydown", async evt => {
         console.log(document.querySelector(".canvas-container"));
         canvas.on('mouse:move', function(opt) {
             // document.querySelector(".upper-canvas").style.cursor = 'move';
-            canvas.setCursor('grab');
+            canvas.setCursor('grabbing');
             var evt = opt.e;
             // console.log(opt.e.buttons);
             this.isDragging = true;
@@ -117,8 +121,8 @@ addEventListener("keyup", async evt => {
     if (evt.key == " ") {
         // document.documentElement.style.cursor = 'default';
         canvas.on('mouse:move', function(opt) {
+            canvas.setCursor(`url(${ getDrawCursor() }) 0 0, crosshair`);
             var evt = opt.e;
-            canvas.setCursor(`url(${ getDrawCursor() }) ${ brushSize / 2 } ${ brushSize / 2 }, crosshair`);
             // document.getElementsByClassName("upper-canvas")[0].style.removeProperty("cursor");
             // console.log(opt.e.buttons);
             this.isDragging = false;
@@ -126,12 +130,13 @@ addEventListener("keyup", async evt => {
             this.selection = true;
             this.lastPosX = evt.clientX;
             this.lastPosY = evt.clientY;
-            canvas.freeDrawingCursor = `url(${ getDrawCursor() }) ${ brushSize / 2 } ${ brushSize / 2 }, crosshair`;
+            canvas.freeDrawingCursor = `url(${ getDrawCursor() }) 0 0, crosshair`;
         });
     }
 });
 
 canvas.on('mouse:move', function(opt) {
+    canvas.setCursor(`url(${ getDrawCursor() }) 0 0, crosshair`);
     if (this.isDragging) {
         canvas.isDrawingMode = false;
         var e = opt.e;
