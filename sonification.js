@@ -1,5 +1,9 @@
 var mock_dsp = window.mock_dsp;
 
+function sleep(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
 canvas.on('mouse:move', function(event) {
     // Get the mouse pointer coordinates relative to the canvas
     // Get an array of all objects on the canvas
@@ -8,18 +12,22 @@ canvas.on('mouse:move', function(event) {
     const window_size = 6;
     var ctx = canvas.getContext('2d', { willReadFrequently: true });
     // // console.log(ctx.getImageData(event.e.clientX, event.e.clientY, 6, 6).data);
-    var data = ctx.getImageData(event.e.clientX - window_size/2, event.e.clientY - window_size/2, window_size, window_size).data;
+	var pointer = canvas.getPointer(event.e);
+    var data = ctx.getImageData(event.e.clientX, event.e.clientY, window_size, window_size).data;
     var array = [];
 	for(var i = 0; i<36; i++){
-		array[i] = data[4*i]
+		array[i] = data[4*i]	
+
 	}
-    // console.log(array);
+	for(var i =0; i<36; i++){
+		// console.log(array[i])	;
+
+	} // BUSCAR COMO VISUALIZAR UN ARRAY EN TIEMPO REAL
 
     ///////// sacando las coordenadas de los pixeles de la imagen ///////////
     var objects = canvas.getObjects();
     
-    console.log();
-    var pointer = canvas.getPointer(event.e);
+    // console.log();
     
     mammography = objects[0]
     // Get the mouse pointer coordinates relative to the image
@@ -27,6 +35,7 @@ canvas.on('mouse:move', function(event) {
     // console.log(mammography.imageData);  
     
     // Log the coordinates to the console
+    // console.log('Event:', event.e.clientX, event.e.clientY);
     // console.log('Mouse coordinates relative to the image:', imagePointer.x, imagePointer.y);
     // console.log('Mouse coordinates relative to the canvas:', pointer.x, pointer.y);
     // const newArr = [];
@@ -73,6 +82,6 @@ function sonification(mean, std, skw, kur, mute){
 	mock_dsp.setParamValue("/audiogen/freq", skw)
 	mock_dsp.setParamValue("/audiogen/tempo", kur)
 
-	let indicators = `Mean: ${mean}, Std: ${std}, Skewness: ${skw}, Kurtosis: ${kur}, NeuralNetwork: ${nn}`
-	console.log(indicators);
+	let indicators = `Mean: ${mean}, Std: ${std}, Skewness: ${skw}, Kurtosis: ${kur}`
+	// console.log(indicators);
 }

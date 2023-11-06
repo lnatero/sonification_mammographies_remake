@@ -1,5 +1,15 @@
+var brushSize = 100; // A default value for the slider
+
+function updateSliderValue(value) {
+  brushSize = parseInt(value, 10);
+  // Update the display
+  document.getElementById("sliderValue").textContent = brushSize;
+  // Additional actions can be performed here
+  console.log("slidervalue", brushSize)
+}
+
 const brushColor = '#FF0F0F90';
-const brushSize = 100;
+// var brushSize = sliderValue;
 var zoom = 0.1;
 
 function myFunction(e) {

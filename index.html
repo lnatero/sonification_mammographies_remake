@@ -111,6 +111,11 @@ window.addEventListener("mousedown", () => {
     <canvas id="rasterCanvas"></canvas>
 
     <script src="canvas.js"></script>
-    <script src="sonification.js"></script>
+    <!-- <script src="sonification.js"></script> -->
+    <div style="padding-top: 50px;">
+        <input type="range" id="mySlider" min="0" max="200" value="100" oninput="updateSliderValue(this.value)">
+        <span id="sliderValue">100</span>
+    </div>
+
 </body>
 </html>
