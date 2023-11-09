@@ -1,4 +1,4 @@
-var brushSize = 100; // A default value for the slider
+var brushSize = 4; // A default value for the slider
 
 function updateSliderValue(value) {
   brushSize = parseInt(value, 10);
@@ -60,7 +60,7 @@ const img = fabric.Image.fromURL("./assets/phantoms/phantom.png", function(oImg)
     oImg.set("hasControls", false);
     oImg.set("hoverCursor", "default");
     canvas.add(oImg);
-    canvas.zoomToPoint(new fabric.Point(oImg.width, oImg.height), 10);
+    canvas.zoomToPoint(new fabric.Point(0, 0), 10);
     imgInstance = oImg;
     // canvas.zoomToPoint(new fabric.Point(oImg.width/1000, oImg.height/1000), 0.1);
 });
