@@ -1,37 +1,63 @@
 var mock_dsp = window.mock_dsp;
 
-function sleep(ms) {
-	return new Promise(resolve => setTimeout(resolve, ms));
-  }
+const arrayDisplay = document.getElementById('arrayDisplay');
+
+function getPixelDataFromOriginalImage(x, y, windowSize) {
+	// Create an off-screen canvas
+	var offScreenCanvas = document.createElement('canvas');
+
+	// Draw the original image on the off-screen canvas
+	var offScreenCtx = offScreenCanvas.getContext('2d', { willReadFrequently: true });
+	console.log(typeof offScreenCanvas);
+	offScreenCanvas.width = imgInstance._originalElement.width;
+	offScreenCanvas.height = imgInstance._originalElement.height;
+	offScreenCtx.drawImage(imgInstance._originalElement, 0, 0);
+
+
+	// Get pixel data
+	var pixelData = offScreenCtx.getImageData(x, y, windowSize, windowSize).data;
+	return pixelData;
+}
 
 canvas.on('mouse:move', function(event) {
     // Get the mouse pointer coordinates relative to the canvas
     // Get an array of all objects on the canvas
 
     ///////// La DATA pareciera estar desfasada hacia abajo y la derecha ///////////
-    const window_size = 6;
+    const window_size = 10;
     var ctx = canvas.getContext('2d', { willReadFrequently: true });
     // // console.log(ctx.getImageData(event.e.clientX, event.e.clientY, 6, 6).data);
 	var pointer = canvas.getPointer(event.e);
     var data = ctx.getImageData(event.e.clientX, event.e.clientY, window_size, window_size).data;
     var array = [];
-	for(var i = 0; i<36; i++){
+	for(var i = 0; i<100; i++){
 		array[i] = data[4*i]	
 
 	}
-	for(var i =0; i<36; i++){
-		// console.log(array[i])	;
-
-	} // BUSCAR COMO VISUALIZAR UN ARRAY EN TIEMPO REAL
-
-    ///////// sacando las coordenadas de los pixeles de la imagen ///////////
-    var objects = canvas.getObjects();
-    
-    // console.log();
-    
-    mammography = objects[0]
-    // Get the mouse pointer coordinates relative to the image
-    var imagePointer = mammography.toLocalPoint(new fabric.Point(pointer.x, pointer.y), 'top', 'left');
+	// for(var i =0; i<36; i++){
+		// 	// console.log(array[i])	;
+		
+	// } // BUSCAR COMO VISUALIZAR UN ARRAY EN TIEMPO REAL
+	
+	///////// sacando las coordenadas de los pixeles de la imagen ///////////
+	var objects = canvas.getObjects();
+	
+	// console.log();
+	
+	mammography = objects[0]
+	var BWPixelData = [];
+	var imagePointer = mammography.toLocalPoint(new fabric.Point(pointer.x, pointer.y), 'top', 'left');
+	var pixelData = getPixelDataFromOriginalImage(Math.round(imagePointer.x) + 50, Math.round(imagePointer.y) + 50, 4);
+	for(var i = 0; i<16; i++){
+		BWPixelData[i] = pixelData[4*i]/255;
+	}
+	const newArr = [];
+	while(BWPixelData.length) newArr.push(BWPixelData.splice(0,4));
+	console.log(BWPixelData)
+	arrayDisplay.textContent = ` ${newArr[0]} \n ${newArr[1]} \n ${newArr[2]} \n ${newArr[3]}`;
+	// arrayDisplay.textContent = JSON.stringify(newArr, null, 2);
+	// Get the mouse pointer coordinates relative to the image
+	// arrayDisplay.textContent = `${Math.round(imagePointer.x) + 50}, ${Math.round(imagePointer.y) + 50}`;
     // console.log(mammography.imageData);  
     
     // Log the coordinates to the console
