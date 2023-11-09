@@ -1,10 +1,7 @@
-
-
-/* canvas {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(50%, 50%);
-    background-color: rgb(33, 79, 119);
-} */
+#arrayDisplay {
+        white-space: pre; /* This will ensure array formatting is preserved */
+    }
+body {
+        font-family: monospace;
+        font-size: 1.35em; /* Increase font size */
+}
