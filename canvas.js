@@ -12,6 +12,8 @@ const brushColor = '#FF0F0F90';
 // var brushSize = sliderValue;
 var zoom = 0.1;
 
+var imgInstance;
+
 function myFunction(e) {
     let x = e.clientX;
     let y = e.clientY;
@@ -50,14 +52,17 @@ const canvas = new fabric.Canvas("rasterCanvas", {
 
 
 
-const img = fabric.Image.fromURL("./assets/C/export--69797765.jpg", function(oImg) {
+// const img = fabric.Image.fromURL("./assets/C/export--69797765.jpg", function(oImg) {
+const img = fabric.Image.fromURL("./assets/phantoms/phantom.png", function(oImg) {
     // oImg.set("lockMovementX", true);
     // oImg.set("lockMovementY", true);
     oImg.set("selectable", false);
     oImg.set("hasControls", false);
     oImg.set("hoverCursor", "default");
     canvas.add(oImg);
-    canvas.zoomToPoint(new fabric.Point(oImg.width/1000, oImg.height/1000), 0.1);
+    canvas.zoomToPoint(new fabric.Point(oImg.width, oImg.height), 10);
+    imgInstance = oImg;
+    // canvas.zoomToPoint(new fabric.Point(oImg.width/1000, oImg.height/1000), 0.1);
 });
   
 canvas.on('mouse:wheel', function(opt) {
@@ -65,7 +70,7 @@ canvas.on('mouse:wheel', function(opt) {
     zoom = canvas.getZoom();
     console.log("Zoom:", zoom);
     zoom *= 0.999 ** delta;
-    if (zoom > 1) zoom = 1;
+    if (zoom > 10) zoom = 10;
     if (zoom < 0.01) zoom = 0.01;
     canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
     opt.e.preventDefault();
