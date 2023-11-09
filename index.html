@@ -114,15 +114,19 @@ window.addEventListener("mousedown", () => {
     <li>Alternativamente puedes moverte manteniendo presionada la barra espaciadora y moviendo el mouse.</li>
     <li>Puedes cambiar el tamaño del selector usando el <i>slider</i> de abajo.</li>
 </ul>
-
+<div style="display: flex;">
     <canvas id="rasterCanvas"></canvas>
+    <div id="arrayDisplay"></div>
 
     <script src="canvas.js"></script>
-    <!-- <script src="sonification.js"></script> -->
-    <div style="padding-top: 25px;">
-        <input type="range" id="mySlider" min="0" max="200" value="100" oninput="updateSliderValue(this.value)">
-        <span id="sliderValue">100</span>
-    </div>
+</div>
+<div style="padding-top: 25px;">
+    <input type="range" id="mySlider" min="0" max="200" value="10" oninput="updateSliderValue(this.value)">
+    <span id="sliderValue">10</span>
+</div>
+  
+
+    <script src="sonification.js"></script>
 
 </body>
 </html>
