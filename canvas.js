@@ -48,6 +48,7 @@ const canvas = new fabric.Canvas("rasterCanvas", {
     enableRetinaScaling: true,
     fireMiddleClick: true,
     freeDrawingCursor: `url(${ getDrawCursor() }) ${ brushSize } ${ brushSize }, crosshair`,
+    selection: false,
 });
 
 
