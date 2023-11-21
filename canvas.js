@@ -53,8 +53,8 @@ const canvas = new fabric.Canvas("rasterCanvas", {
 
 
 
-// const img = fabric.Image.fromURL("./assets/C/export--69797765.jpg", function(oImg) {
-const img = fabric.Image.fromURL("./assets/phantoms/phantom.png", function(oImg) {
+const img = fabric.Image.fromURL("./assets/C/export--69797765.jpg", function(oImg) {
+// const img = fabric.Image.fromURL("./assets/phantoms/phantom.png", function(oImg) {
     // oImg.set("lockMovementX", true);
     // oImg.set("lockMovementY", true);
     oImg.set("selectable", false);
