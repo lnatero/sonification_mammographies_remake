@@ -1,4 +1,4 @@
-var brushSize = 4; // A default value for the slider
+var brushSize = 100; // A default value for the slider
 
 function updateSliderValue(value) {
   brushSize = parseInt(value, 10);
@@ -10,7 +10,7 @@ function updateSliderValue(value) {
 
 const brushColor = '#FF0F0F90';
 // var brushSize = sliderValue;
-var zoom = 0.1;
+var zoom = 0.25;
 
 var imgInstance;
 
@@ -24,18 +24,18 @@ function myFunction(e) {
 const getDrawCursor = () => {
     const square = `
         <svg
-            height="${ brushSize*zoom }"
-            width="${ brushSize*zoom }"
+            height="${ brushSize*zoom*0.9 }" 
+            width="${ brushSize*zoom*0.9 }"
             fill="${ brushColor }"
             fill-opacity="0.9"
             xmlns="http://www.w3.org/2000/svg"
         >
             <rect
-                width="${ brushSize*zoom }"
-                height="${ brushSize*zoom }"
+                width="${ brushSize*zoom*0.9 }"
+                height="${ brushSize*zoom*0.9 }"
             />
         </svg>
-    `;
+    `; // añadí un 0.9 y ahora al hacer click el rect colocado calza perfecto, no se bien porqué
     
     return `data:image/svg+xml;base64,${ window.btoa(square) }`;
 };
@@ -61,7 +61,7 @@ const img = fabric.Image.fromURL("./assets/C/export--69797765.jpg", function(oIm
     oImg.set("hasControls", false);
     oImg.set("hoverCursor", "default");
     canvas.add(oImg);
-    canvas.zoomToPoint(new fabric.Point(0, 0), 10);
+    canvas.zoomToPoint(new fabric.Point(0, 0), zoom);
     imgInstance = oImg;
     // canvas.zoomToPoint(new fabric.Point(oImg.width/1000, oImg.height/1000), 0.1);
 });
@@ -82,6 +82,9 @@ canvas.on('mouse:wheel', function(opt) {
     canvas.requestRenderAll();
 });
 
+canvas.on('mouse:up', function(opt) {
+    canvas.setCursor(`url(${ getDrawCursor() }) 0 0, crosshair`);
+});
 canvas.on('mouse:down', function(opt) {
     var evt = opt.e;
     console.log(opt.e.buttons);
