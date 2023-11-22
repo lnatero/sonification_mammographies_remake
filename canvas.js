@@ -24,18 +24,18 @@ function myFunction(e) {
 const getDrawCursor = () => {
     const square = `
         <svg
-            height="${ brushSize*zoom*0.9 }" 
-            width="${ brushSize*zoom*0.9 }"
+            height="${ brushSize*zoom }" 
+            width="${ brushSize*zoom }"
             fill="${ brushColor }"
             fill-opacity="0.9"
             xmlns="http://www.w3.org/2000/svg"
         >
             <rect
-                width="${ brushSize*zoom*0.9 }"
-                height="${ brushSize*zoom*0.9 }"
+                width="${ brushSize*zoom }"
+                height="${ brushSize*zoom }"
             />
         </svg>
-    `; // añadí un 0.9 y ahora al hacer click el rect colocado calza perfecto, no se bien porqué
+    `; // tienen que estar iguales, si no no calzan
     
     return `data:image/svg+xml;base64,${ window.btoa(square) }`;
 };
