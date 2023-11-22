@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonification Mammographies</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="./lib/fabric.js"></script>
+    <script src="faust/mockDSP/mockDSP.js"></script>
+    <!-- <script src="https://unpkg.com/fabric@5.3.0/dist/fabric.min.js"></script> -->
+</head>
+<body>
+
+    <script>
+if (typeof (WebAssembly) === "undefined") {
+    alert("WebAssembly is not supported in this browser, the page will not work !")
+}
+
+var isWebKitAudio = (typeof (webkitAudioContext) !== "undefined");
+var audio_context = (isWebKitAudio) ? new webkitAudioContext({ latencyHint: 0.00001 }) : new AudioContext({ latencyHint: 0.00001 });
+audio_context.destination.channelInterpretation = "discrete";
+
+var mock_dsp = null;
+
+// Slider handler to change the 'osc' frequency
+function toggleMute()
+{
+    var val = event.target.value;
+    console.log(val);
+    // val = parseFloat(val);
+    mock_dsp.setParamValue("/audiogen/mute", val);
+}
+
+function changeMean(event)
+{
+    var val = event.target.value;
+    val = parseFloat(val);
+    console.log(val);
+    mock_dsp.setParamValue("/audiogen/vol", val);
+}
+
+// Slider handler to change the 'osc' volume
+function changeStdDev(event)
+{
+    var val = event.target.value;
+    val = parseFloat(val);
+    console.log(val);
+    mock_dsp.setParamValue("/audiogen/noise", val);
+}
+// Slider handler to change the 'osc' volume
+function changeSkewness(event)
+{
+    var val = event.target.value;
+    val = parseFloat(val);
+    console.log(val);
+    mock_dsp.setParamValue("/audiogen/freq", val);
+}
+// Slider handler to change the 'osc' volume
+function changeKurtosis(event)
+{
+    var val = event.target.value;
+    val = parseFloat(val);
+    console.log(val);
+    mock_dsp.setParamValue("/audiogen/tempo", val);
+}
+
+function startmockDSP()
+{
+    // Create the Faust generated node
+    var pluginURL = ".";
+    var plugin = new FaustmockDSP(audio_context, pluginURL);
+    plugin.load().then(node => {
+                            mock_dsp = node;
+                            console.log(mock_dsp.getJSON());
+                            // Print paths to be used with 'setParamValue'
+                            console.log(mock_dsp.getParams());
+                            // Connect it to output as a regular WebAudio node
+                            mock_dsp.connect(audio_context.destination);
+                      });
+}
+
+// Load handler
+window.addEventListener('load', startmockDSP);
+
+// To activate audio on iOS
+window.addEventListener('touchstart', function() {
+                        if (audio_context.state !== "suspended") return;
+                        // create empty buffer
+                        var buffer = audio_context.createBuffer(1, 1, 22050);
+                        var source = audio_context.createBufferSource();
+                        source.buffer = buffer;
+                        
+                        // connect to output (your speakers)
+                        source.connect(audio_context.destination);
+                        
+                        // play the file
+                        source.start();
+                        
+                        audio_context.resume().then(() => console.log("Audio resumed"));
+                        }, false);
+
+// On desktop
+window.addEventListener("mousedown", () => {
+    if (audio_context.state !== "suspended") return;
+    audio_context.resume().then(() => console.log("Audio resumed"))
+});  
+
+    </script>
+
+<b>Controles</b>
+<ul>
+    <li>Puedes hacer zoom con la rueda del mouse.</li>
+    <li>Puedes moverle en la imagen manteniendo presionada la rueda del mouse.</li>
+    <li>Alternativamente puedes moverte manteniendo presionada la barra espaciadora y moviendo el mouse.</li>
+    <li>Puedes cambiar el tamaño del selector usando el <i>slider</i> de abajo.</li>
+</ul>
+<div style="display: flex;">
+    <canvas id="rasterCanvas"></canvas>
+    <div id="arrayDisplay"></div>
+
+    <script src="canvas.js"></script>
+</div>
+<div style="padding-top: 25px;">
+    <input type="range" id="mySlider" min="0" max="200" value="4" oninput="updateSliderValue(this.value)">
+    <span id="sliderValue">4</span>
+</div>
+  
+
+    <script src="sonification.js"></script>
+
+</body>
+</html>

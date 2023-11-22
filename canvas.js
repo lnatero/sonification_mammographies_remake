@@ -51,7 +51,9 @@ const canvas = new fabric.Canvas("rasterCanvas", {
     selection: false,
 });
 
-
+canvas.selectionColor = 'rgba(0,0,0,0)';  // Transparent selection color
+canvas.selectionBorderColor = 'rgba(0,0,0,0)';  // Transparent border color
+canvas.selectionLineWidth = 0;  // No border width
 
 const img = fabric.Image.fromURL("./assets/C/export--69797765.jpg", function(oImg) {
 // const img = fabric.Image.fromURL("./assets/phantoms/phantom.png", function(oImg) {
@@ -60,6 +62,7 @@ const img = fabric.Image.fromURL("./assets/C/export--69797765.jpg", function(oIm
     oImg.set("selectable", false);
     oImg.set("hasControls", false);
     oImg.set("hoverCursor", "default");
+    oImg.selectable = false;
     canvas.add(oImg);
     canvas.zoomToPoint(new fabric.Point(0, 0), zoom);
     imgInstance = oImg;
@@ -110,7 +113,9 @@ canvas.on('mouse:down', function(opt) {
             fill: 'rgba(255,0,0,0.5)',
             width: brushSize,
             height: brushSize,
-            selectable: false
+            selectable: false,
+            hasBorders: false,
+            hasControls: false,
         });
         canvas.add(rect);
     }
