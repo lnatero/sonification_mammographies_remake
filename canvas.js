@@ -24,15 +24,15 @@ function myFunction(e) {
 const getDrawCursor = () => {
     const square = `
         <svg
-            height="${ brushSize*zoom }" 
-            width="${ brushSize*zoom }"
+            height="${ brushSize*zoom*0.84 }" 
+            width="${ brushSize*zoom*0.84 }"
             fill="${ brushColor }"
             fill-opacity="0.9"
             xmlns="http://www.w3.org/2000/svg"
         >
             <rect
-                width="${ brushSize*zoom }"
-                height="${ brushSize*zoom }"
+                width="${ brushSize*zoom*0.84 }"
+                height="${ brushSize*zoom*0.84 }"
             />
         </svg>
     `; // tienen que estar iguales, si no no calzan
