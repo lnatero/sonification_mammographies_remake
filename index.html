@@ -7,16 +7,16 @@
 </head>
 <body>
     <div id="startScreen">
-        <h1>Title of Website</h1>
-        <input type="text" id="userName" placeholder="Enter Your Name">
-        <button id="startButton">Start</button>
+        <h1>Sonificación de Mamografías</h1>
+        <input type="text" id="userName" placeholder="Ingresa tu nombre y apellido">
+        <button id="startButton">Empezar</button>
     </div>
 
     <script>
         document.getElementById('startButton').addEventListener('click', function() {
             var userName = document.getElementById('userName').value;
             if(userName.trim() === '') {
-                alert('Please enter your name.');
+                alert('Ingresa tu nombre y apellido.');
                 return;
             }
 

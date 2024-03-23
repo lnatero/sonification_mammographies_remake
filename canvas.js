@@ -1,18 +1,29 @@
 var brushSize = 100; // A default value for the slider
 
-function updateSliderValue(value) {
-  brushSize = parseInt(value, 10);
-  // Update the display
-  document.getElementById("sliderValue").textContent = brushSize;
-  // Additional actions can be performed here
-  console.log("slidervalue", brushSize)
-}
-
 const brushColor = '#FF0F0F90';
 // var brushSize = sliderValue;
 var zoom = 0.25;
 
-var imgInstance;
+var imgInstance = null;
+
+imgURL = "./assets/C/export--69797765.jpg";
+
+mammo_img = new Image();
+mammo_img.onload = function() {
+    console.log("Height: " + mammo_img.height);
+    console.log("Width: " + mammo_img.width);
+};
+mammo_img.src = imgURL;
+
+
+function updateSliderValue(value) {
+  brushSize = parseInt(value, 10);
+  // Update the display
+  document.getElementById("sliderValue").textContent = toString(brushSize);
+  // Additional actions can be performed here
+  console.log("slidervalue", brushSize)
+}
+
 
 function myFunction(e) {
     let x = e.clientX;
@@ -55,7 +66,7 @@ canvas.selectionColor = 'rgba(0,0,0,0)';  // Transparent selection color
 canvas.selectionBorderColor = 'rgba(0,0,0,0)';  // Transparent border color
 canvas.selectionLineWidth = 0;  // No border width
 
-const img = fabric.Image.fromURL("./assets/C/export--69797765.jpg", function(oImg) {
+const img = new fabric.Image.fromURL(imgURL, function(oImg) {
 // const img = fabric.Image.fromURL("./assets/phantoms/phantom.png", function(oImg) {
     // oImg.set("lockMovementX", true);
     // oImg.set("lockMovementY", true);
@@ -186,9 +197,37 @@ canvas.on('mouse:up', function(opt) {
   });
 
 
+var tempCanvas = new fabric.Canvas();
+
+console.log("img", img);
+console.log("img height", mammo_img.height, "img width", mammo_img.width);
+tempCanvas.setWidth(img.width); // Set to required dimensions
+tempCanvas.setHeight(img.height);
+
+// Copy only rectangle objects to the temporary canvas
 
 
-canvas.requestRenderAll();
+document.getElementById('saveButton').addEventListener('click', function() {
+    // console.log("Saving image!")
+    canvas.forEachObject(function(obj){
+        console.log(obj)
+        if(obj.type === 'rect'){
+            var clone = fabric.util.object.clone(obj);
+            tempCanvas.add(clone);
+        }
+    });
+
+    console.log("saved!")
+    tempCanvas.renderAll();
+    var imageData = tempCanvas.toDataURL({
+        format: 'png',
+        quality: 1
+    });
+    localStorage.setItem('image1', imageData);
+    // Additional code to handle the image data (e.g., store it or prepare for download)
+});
+
+
 // rect = new fabric.Rect({
 //     left: 10,
 //     top: 200,
