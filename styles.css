@@ -1,5 +1,5 @@
 #arrayDisplay {
-        white-space: pre; /* This will ensure array formatting is preserved */
+        white-space: pre;
     }
 body {
         font-family: monospace; 
