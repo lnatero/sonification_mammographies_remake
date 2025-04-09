@@ -2,6 +2,6 @@
         white-space: pre; /* This will ensure array formatting is preserved */
     }
 body {
-        font-family: monospace;
+        font-family: monospace; 
         font-size: 1.35em; /* Increase font size */
 }
